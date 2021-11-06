@@ -1,0 +1,10 @@
+---
+version: '3'
+services:
+  nagatha:
+    build: .
+    image: azcoigreach/nagatha
+    restart: unless-stopped
+    container_name: nagatha
+    volumes:
+      - "./core:/nagatha/core"
