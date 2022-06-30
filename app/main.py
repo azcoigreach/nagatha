@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_discord import DiscordOAuthClient, RateLimited, Unauthorized, User
 from fastapi_discord.models import GuildPreview
@@ -70,4 +70,4 @@ async def get_guilds(guilds: List = Depends(discord.guilds)):
 
 @app.post("/commands")
 async def commands():
-    return {"message": "Nagatha commands"}
+    return Response({"type": 1}, status_code=status.HTTP_200_OK)
