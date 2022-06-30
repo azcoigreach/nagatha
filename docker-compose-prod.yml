@@ -8,3 +8,4 @@ services:
       - CLIENT_ID=${CLIENT_ID}
       - CLIENT_SECRET=${CLIENT_SECRET}
       - REDIRECT_URI=${REDIRECT_URI}
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
