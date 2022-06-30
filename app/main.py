@@ -72,4 +72,4 @@ async def get_guilds(guilds: List = Depends(discord.guilds)):
 @app.post("/commands")
 async def commands():
     payload = {'type': 1}
-    return Response(payload, status_code=status.HTTP_200_OK)
+    return payload
