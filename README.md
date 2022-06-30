@@ -1,3 +1,3 @@
 # nagatha
 
-docker-compose run --rm nagatha status
+Nagatha the Discord Bot
