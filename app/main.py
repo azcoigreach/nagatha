@@ -14,15 +14,15 @@ discord = DiscordOAuthClient(
 )  # scopes
 
 
+
 @app.get("/login")
 async def login():
-    return {"url": discord.get_oauth_login_url(state="my state")}
+    return {"url": discord.oauth_login_url}
 
 
 @app.get("/callback")
-async def callback(code: str, state: str):
+async def callback(code: str):
     token, refresh_token = await discord.get_access_token(code)
-    assert state == "my state"
     return {"access_token": token, "refresh_token": refresh_token}
 
 
