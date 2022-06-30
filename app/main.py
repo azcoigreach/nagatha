@@ -1,4 +1,5 @@
 from typing import List
+from aiohttp import payload_type
 
 from fastapi import Depends, FastAPI, Response, status
 from fastapi.responses import JSONResponse
@@ -70,4 +71,5 @@ async def get_guilds(guilds: List = Depends(discord.guilds)):
 
 @app.post("/commands")
 async def commands():
-    return Response({"type": 1}, status_code=status.HTTP_200_OK)
+    payload = f"{"type": 1}"
+    return Response(payload, status_code=status.HTTP_200_OK)
