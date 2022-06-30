@@ -12,7 +12,9 @@
 *.pickle
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+*.egg-info
+venv/
+.env
 # Mono auto generated files
 mono_crash.*
 

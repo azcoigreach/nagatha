@@ -1,0 +1,1 @@
+fastapi-discord==0.2.2
