@@ -10,7 +10,7 @@ from .config import settings
 app = FastAPI()
 
 discord = DiscordOAuthClient(
-    settings.client_id, settings.client_secret, settings.redirect_uri, ("identify", "guilds", "email")
+    settings.client_id, settings.client_secret, settings.redirect_uri, ("bot")
 )  # scopes
 
 @app.get("/")
@@ -68,6 +68,6 @@ async def get_guilds(guilds: List = Depends(discord.guilds)):
     return guilds
 
 
-@app.get("/commands")
+@app.post("/commands")
 async def commands():
     return {"message": "Nagatha commands"}
