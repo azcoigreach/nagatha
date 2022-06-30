@@ -1,0 +1,14 @@
+README.md
+setup.py
+core/__init__.py
+core/cli.py
+core/commands/__init__.py
+core/commands/cmd_chat.py
+core/commands/cmd_crypto.py
+core/commands/cmd_read.py
+nagatha_core.egg-info/PKG-INFO
+nagatha_core.egg-info/SOURCES.txt
+nagatha_core.egg-info/dependency_links.txt
+nagatha_core.egg-info/entry_points.txt
+nagatha_core.egg-info/requires.txt
+nagatha_core.egg-info/top_level.txt
