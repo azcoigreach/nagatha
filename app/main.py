@@ -13,7 +13,9 @@ discord = DiscordOAuthClient(
     settings.client_id, settings.client_secret, settings.redirect_uri, ("identify", "guilds", "email")
 )  # scopes
 
-
+@app.get("/")
+async def root():
+    return {"message": "Nagatha Discord Bot"}
 
 @app.get("/login")
 async def login():
