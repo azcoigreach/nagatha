@@ -66,3 +66,8 @@ async def get_user(user: User = Depends(discord.user)):
 )
 async def get_guilds(guilds: List = Depends(discord.guilds)):
     return guilds
+
+
+@app.get("/commands")
+async def commands():
+    return {"message": "Nagatha commands"}
