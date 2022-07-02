@@ -14,7 +14,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-nagatha = commands.Bot(command_prefix=';', description=description, intents=intents)
+bot = commands.Bot(command_prefix=';', description=description, intents=intents)
 
 @bot.event
 async def on_ready():
@@ -33,8 +33,8 @@ def get_battlemetrics_data():
     server_data = json.loads(response.text)
     return server_data
 
-@nagatha.command(name = "ping", description = "Pong!"):
+@bot.command(name = "ping", description = "Pong!"):
 async def ping(self, ctx):
     await ctx.send("Pong!")
 
-nagatha.run(settings.DISCORD_TOKEN)
+bot.run(settings.DISCORD_TOKEN)
