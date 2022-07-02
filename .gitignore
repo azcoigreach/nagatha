@@ -9,12 +9,14 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.pickle
-# User-specific files (MonoDevelop/Xamarin Studio)
-*.userprefs
-*.egg-info
+*.egg-info/
 venv/
 .env
+docker-compose.yml
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
 # Mono auto generated files
 mono_crash.*
 
