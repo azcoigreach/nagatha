@@ -28,7 +28,7 @@ def get_battlemetrics_data():
     server_data = json.loads(response.text)
     return server_data
 
-@tree.command(name = "ping", description = "Pong!"):
+@tree.command(guild = settings.GUILD_ID, name = "ping", description = "Pong!"):
 async def ping(self, ctx):
     await ctx.send("Pong!")
 
