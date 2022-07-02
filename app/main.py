@@ -5,10 +5,17 @@ from app.config import settings
 import requests
 import json
 import discord
-from discord.ext import commands
+from discord import app_commands
 
-intents = discord.Intents.default()
-bot = commands.Bot(command_prefix='>', intents=intents)
+class client(discord.Client):
+    async def startup(self):
+        await self.wait_until_ready()
+        await tree.sync()
+        print('Ready!')
+
+nagatha = client()
+tree = app_commands.CommandTree(name='tree', invoke_without_command=True)
+
 
 # battlemetrics.com/servers/vrising/15443201
 def get_battlemetrics_data():
@@ -21,16 +28,8 @@ def get_battlemetrics_data():
     server_data = json.loads(response.text)
     return server_data
 
-@bot.tree.command()
-async def ping(ctx):
-    await ctx.send('Hello dear.')
+@tree.command(name = "ping", description = "Pong!"):
+    async def ping(self, ctx):
+        await ctx.send("Pong!")
 
-@bot.listen
-async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
-    await bot.tree.sync()
-
-bot.run(settings.DISCORD_TOKEN)
+nagatha.run(settings.DISCORD_TOKEN)
