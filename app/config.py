@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     GAME_ID: str
     SERVER_ID: int
     DISCORD_TOKEN: str
+    GUILD_ID: int
     
     class Config:
         env_file = ".env"

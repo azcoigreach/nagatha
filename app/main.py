@@ -10,7 +10,7 @@ from discord import app_commands
 class client(discord.Client):
     async def startup(self):
         await self.wait_until_ready()
-        await tree.sync()
+        await tree.sync(guild = discord.Object(id = settings.GUILD_ID))
         print('Ready!')
 
 nagatha = client()
@@ -29,7 +29,7 @@ def get_battlemetrics_data():
     return server_data
 
 @tree.command(name = "ping", description = "Pong!"):
-    async def ping(self, ctx):
-        await ctx.send("Pong!")
+async def ping(self, ctx):
+    await ctx.send("Pong!")
 
 nagatha.run(settings.DISCORD_TOKEN)
