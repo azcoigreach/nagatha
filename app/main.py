@@ -21,7 +21,7 @@ def get_battlemetrics_data():
     server_data = json.loads(response.text)
     return server_data
 
-@bot.command()
+@bot.tree.command()
 async def ping(ctx):
     await ctx.send('Hello dear.')
 
@@ -31,5 +31,6 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    await bot.tree.sync()
 
 bot.run(settings.DISCORD_TOKEN)
