@@ -5,16 +5,21 @@ from app.config import settings
 import requests
 import json
 import discord
-from discord import app_commands
+from discord.ext import commands
 
-class client(discord.Client):
-    async def startup(self):
-        await self.wait_until_ready()
-        await tree.sync()
-        print('Ready!')
 
-nagatha = client()
-tree = app_commands.CommandTree(name='tree', invoke_without_command=True)
+description = '''Nagath is a bot that send you battlemetrics.com server data in Discord.'''
+
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+nagatha = commands.Bot(command_prefix=';', description=description, intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print('------')
 
 
 # battlemetrics.com/servers/vrising/15443201
@@ -28,7 +33,7 @@ def get_battlemetrics_data():
     server_data = json.loads(response.text)
     return server_data
 
-@tree.command(name = "ping", description = "Pong!"):
+@nagatha.command(name = "ping", description = "Pong!"):
 async def ping(self, ctx):
     await ctx.send("Pong!")
 
