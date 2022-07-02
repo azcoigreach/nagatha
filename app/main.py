@@ -8,7 +8,6 @@ import discord
 from discord.ext import commands
 
 intents = discord.Intents.default()
-intents.message_content = True
 bot = commands.Bot(command_prefix='>', intents=intents)
 
 # battlemetrics.com/servers/vrising/15443201
@@ -24,7 +23,7 @@ def get_battlemetrics_data():
 
 @bot.command()
 async def ping(ctx):
-    await ctx.send('pong')
+    await ctx.send('Hello dear.')
 
 @bot.listen
 async def on_ready():
