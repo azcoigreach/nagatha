@@ -5,7 +5,7 @@ from app.config import settings
 import requests
 import json
 import discord
-from discord import app_commands
+from discord import commands
 
 class client(discord.Client):
     async def startup(self):
@@ -14,7 +14,7 @@ class client(discord.Client):
         print('Ready!')
 
 nagatha = client()
-tree = app_commands.CommandTree(name='tree', invoke_without_command=True)
+tree = commands.CommandTree(name='tree', invoke_without_command=True)
 
 
 # battlemetrics.com/servers/vrising/15443201
