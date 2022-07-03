@@ -45,7 +45,7 @@ async def on_ready():
 async def invite(ctx):
     await ctx.send('https://discordapp.com/oauth2/authorize?client_id=723180989842791424&scope=bot&permissions=8')
 
-
+# vrising group command shows server information in discord embed format
 @bot.group()
 async def vrising(ctx):
     """v-rising server info"""
