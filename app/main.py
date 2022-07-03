@@ -56,7 +56,7 @@ async def vrising(ctx):
     ctx.server_maxPlayers = server_data['data']['attributes']['maxPlayers']
     ctx.server_rank = server_data['data']['attributes']['rank']
     ctx.server_status = server_data['data']['attributes']['status']
-    ctx.server_details = server_data['data']['attributes']['details']
+    ctx.server_settings = server_data['data']['attributes']['details']['settings']
 
 
     if ctx.invoked_subcommand is None:
@@ -71,10 +71,10 @@ async def vrising(ctx):
         await ctx.send(embed=embed)
 
 # server status group command
-@vrising.command(name='details')
-async def _details(ctx):
+@vrising.command(name='settings')
+async def _settings(ctx):
     """server details"""
-    await ctx.send(f"'''{ctx.server_details}'''")
+    await ctx.send(f"'''{ctx.server_settings}'''")
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
