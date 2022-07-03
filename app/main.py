@@ -40,6 +40,11 @@ async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
 
+# bot invite link: https://discordapp.com/oauth2/authorize?client_id=723180989842791424&scope=bot&permissions=8
+@bot.command()
+async def invite(ctx):
+    await ctx.send('https://discordapp.com/oauth2/authorize?client_id=723180989842791424&scope=bot&permissions=8')
+
 
 @bot.group()
 async def vrising(ctx):
