@@ -76,7 +76,7 @@ async def vrising(ctx):
 @vrising.command(name='settings')
 async def _settings(ctx):
     """server settings"""
-    await ctx.send(file=discord.File(BytesIO(ctx.server_settings.encode('utf-8')), filename='settings.json'))
+    await ctx.send(file=discord.File(BytesIO(str(ctx.server_settings.encode('utf-8'))), filename='settings.json'))
 
 
 
