@@ -7,7 +7,7 @@ import json
 import discord
 from discord.ext import commands
 import random
-import BytesIO
+from io import BytesIO
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
