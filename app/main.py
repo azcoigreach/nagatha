@@ -49,9 +49,11 @@ async def invite(ctx):
 @bot.group()
 async def vrising(ctx):
     """v-rising server info"""
-    ctx.server_data = get_battlemetrics_data()
+    server_data = get_battlemetrics_data()
+    ctx.server_name = server_data['name']
     if ctx.invoked_subcommand is None:
-        await ctx.send(ctx.server_data['data']['attributes']['name'])
+        embed = discord.Embed(title=ctx.server_name, description="", color=0x00ff00)
+        await ctx.send(embed=embed)
 
 # server status group command
 @vrising.command(name='status')
