@@ -74,7 +74,7 @@ async def vrising(ctx):
 @vrising.command(name='settings')
 async def _settings(ctx):
     """server settings"""
-    await ctx.send(file=discord.File(fp=ctx.server_settings, filename='vrising_settings.json'))
+    await ctx.send(file=discord.File(fp=str(ctx.server_settings), filename='vrising_settings.json'))
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
