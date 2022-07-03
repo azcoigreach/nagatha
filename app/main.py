@@ -3,12 +3,7 @@
 import sys, traceback
 from app.config import settings
 import discord
-from discord.ext import commands, tasks
-import requests
-import json
-from io import BytesIO
-import random
-import prettyprint as pp
+from discord.ext import commands
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
@@ -32,7 +27,6 @@ def get_prefix(bot, message):
 
 # list of folders our cogs are in
 initial_extensions = [
-    # 'app.cogs.server', 
     'app.cogs.owner',
     'app.cogs.members',
     'app.cogs.simple',
