@@ -1,145 +1,90 @@
 # Get server data from the battlemetrics.com API and send it in a Discord.
-# techstack: Python3, discord.py, requests, battlemetrics.com
-
+# techstack: Python3, discord.py, requests, battlemetrics.com, io, pydantic, json
+import sys, traceback
 from app.config import settings
+import discord
+from discord.ext import commands, tasks
 import requests
 import json
-import discord
-from discord.ext import commands
-import random
 from io import BytesIO
+import random
 import prettyprint as pp
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
-description = '''An example bot to showcase the discord.ext.commands extension
-module.
+description = '''Nagatha is a multi-function discord bot.
+ - Retrieve server data from battlemetrics.com
+ - Retrieve crypto currency data from binance.us'''
 
-There are a number of utility commands being showcased here.'''
+def get_prefix(bot, message):
+    """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
-intents = discord.Intents.default()
-intents.members = True
-# intents.message_content = True
+    # Notice how you can use spaces in prefixes. Try to keep them simple though.
+    prefixes = ['>?', 'nagatha ', 'nag ', '!?']
 
-bot = commands.Bot(command_prefix=';', description=description, intents=intents)
+    # Check to see if we are outside of a guild. e.g DM's etc.
+    if not message.guild:
+        # Only allow ? to be used in DMs
+        return '?'
+
+    # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
+    return commands.when_mentioned_or(*prefixes)(bot, message)
+
+# list of folders our cogs are in
+initial_extensions = [
+    # 'app.cogs.server', 
+    'app.cogs.owner',
+    'app.cogs.members',
+    'app.cogs.simple',
+    'app.cogs.server',
+    'app.cogs.crypto'
+    ]
+
+bot = commands.Bot(command_prefix=get_prefix, description=description)
 
 
-# battlemetrics.com/servers/vrising/15443201
-def get_battlemetrics_data():
-    url = "https://api.battlemetrics.com/servers/{}".format(settings.SERVER_ID)
-    headers = {
-        'Authorization': 'Bearer {}'.format(settings.API_KEY),
-        'Accept': 'application/json'
-    }
-    response = requests.get(url, headers=headers)
-    server_data = json.loads(response.text)
-    return server_data
+# discord invite: https://discord.gg/pM4Z8jjG2y
+# bot invite link: https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot
+@bot.command()
+async def invite(ctx):
+    """Invite and support links"""
+    bot_link = "https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot"
+    support_link = "https://discord.gg/pM4Z8jjG2y"
+    await ctx.send(f"Invite Nagatha to your Discord: {bot_link}\nJoin the support server: {support_link}")
 
+@bot.command()
+async def ping(ctx):
+    """Ping pong"""
+    await ctx.send('Hello Dear.')
 
+# random cat photo from tenor to discord
+@bot.command()
+async def cat(ctx):
+    """Random cat photo"""
+    url = "https://api.tenor.com/v1/random?key=LIVDSRZULELA&q=cats&limit=1"
+    response = requests.get(url)
+    data = json.loads(response.text)
+    embed = discord.Embed(title="Random cat photo", color=0x00ff00)
+    embed.set_image(url=data['results'][0]['media'][0]['gif']['url'])
+    await ctx.send(embed=embed)
+
+# load cogs from initial_extensions
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            print(f'Failed to load extension {extension}.', file=sys.stderr)
+            traceback.print_exc()
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})\nVersion: {discord.__version__}\n')
     print('------')
-
-# bot invite link: https://discordapp.com/oauth2/authorize?client_id=723180989842791424&scope=bot&permissions=8
-@bot.command()
-async def invite(ctx):
-    await ctx.send('https://discordapp.com/oauth2/authorize?client_id=723180989842791424&scope=bot&permissions=8')
-
-# vrising group command shows server information in discord embed format
-@bot.group()
-async def vrising(ctx):
-    """v-rising server info"""
-    server_data = get_battlemetrics_data()
-    ctx.server_name = server_data['data']['attributes']['name']
-    ctx.server_id = server_data['data']['id']
-    ctx.server_players = server_data['data']['attributes']['players']
-    ctx.server_maxPlayers = server_data['data']['attributes']['maxPlayers']
-    ctx.server_rank = server_data['data']['attributes']['rank']
-    ctx.server_status = server_data['data']['attributes']['status']
-    ctx.server_settings = server_data['data']['attributes']['details']['vrising_settings']
-
-
-    if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title=ctx.server_name,
-        description="Game server status", 
-        color=0x00ff00,
-        url="https://battlemetrics.com/servers/vrising/15443201")
-        embed.add_field(name="Status", value=ctx.server_status, inline=True)
-        embed.add_field(name="Server ID", value=ctx.server_id, inline=True)
-        embed.add_field(name="Players", value=f"{ctx.server_players} of {ctx.server_maxPlayers}", inline=True)
-        embed.add_field(name="Rank", value=ctx.server_rank, inline=True)
-        await ctx.send(embed=embed)
-
-# retrieve vrising_settings from battlemetrics.com
-# send json string with BytesIO as file to discord
-@vrising.command(name='settings')
-async def _settings(ctx):
-    """server settings"""
-    pprint_data = pp(ctx.server_settings).encode('utf-8')
-    await ctx.send(file=discord.File(BytesIO(pprint_data), filename='settings.json'))
-
-
-
-# @bot.command()
-# async def add(ctx, left: int, right: int):
-#     """Adds two numbers together."""
-#     await ctx.send(left + right)
-
-
-# @bot.command()
-# async def roll(ctx, dice: str):
-#     """Rolls a dice in NdN format."""
-#     try:
-#         rolls, limit = map(int, dice.split('d'))
-#     except Exception:
-#         await ctx.send('Format has to be in NdN!')
-#         return
-
-#     result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-#     await ctx.send(result)
-
-
-# @bot.command(description='For when you wanna settle the score some other way')
-# async def choose(ctx, *choices: str):
-#     """Chooses between multiple choices."""
-#     await ctx.send(random.choice(choices))
-
-
-# @bot.command()
-# async def repeat(ctx, times: int, content='repeating...'):
-#     """Repeats a message multiple times."""
-#     for i in range(times):
-#         await ctx.send(content)
-
-
-# @bot.command()
-# async def ping(ctx):
-#     """Ping pong"""
-#     await ctx.send('Hello Dear.')
-
-
-# @bot.command()
-# async def joined(ctx, member: discord.Member):
-#     """Says when a member joined."""
-#     await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
-
-
-# @bot.group()
-# async def cool(ctx):
-#     """Says if a user is cool.
-
-#     In reality this just checks if a subcommand is being invoked.
-#     """
-#     if ctx.invoked_subcommand is None:
-#         await ctx.send(f'No, {ctx.subcommand_passed} is not cool')
-
-
-# @cool.command(name='bot')
-# async def _bot(ctx):
-#     """Is the bot cool?"""
-#     await ctx.send('Yes, the bot is cool.')
-
+    # change discord presence
+    await bot.change_presence(activity=discord.Game(name="Taking over the world!"))
+    print(f'Successfully logged in and booted...!')
 
 bot.run(settings.DISCORD_TOKEN)
+
+
