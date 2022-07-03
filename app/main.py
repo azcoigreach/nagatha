@@ -7,6 +7,7 @@ import json
 import discord
 from discord.ext import commands
 import random
+import BytesIO
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
@@ -70,11 +71,14 @@ async def vrising(ctx):
         embed.add_field(name="Rank", value=ctx.server_rank, inline=True)
         await ctx.send(embed=embed)
 
-# retrieve vrising_settings from battlemetrics.com and send it in a discord as a file
+# retrieve vrising_settings from battlemetrics.com
+# send json string with BytesIO as file to discord
 @vrising.command(name='settings')
 async def _settings(ctx):
     """server settings"""
-    await ctx.send(file=discord.File(fp=str(ctx.server_settings), filename='vrising_settings.json'))
+    await ctx.send(file=discord.File(BytesIO(ctx.server_settings.encode('utf-8')), filename='settings.json'))
+
+
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
