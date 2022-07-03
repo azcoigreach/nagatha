@@ -46,14 +46,14 @@ async def vrising(ctx):
     """v-rising server info"""
     ctx.server_data = get_battlemetrics_data()
     if ctx.invoked_subcommand is None:
-        await ctx.send(ctx.server_data)['data']['attributes']['name']
+        await ctx.send(ctx.server_data['data']['attributes']['name'])
 
 # server status group command
 @vrising.command(name='status')
 async def _status(ctx):
     """server status"""
     server_name = ctx.server_data['data']['attributes']['name']
-    server_status = get_battlemetrics_data()['data']['attributes']['status']
+    server_status = ctx.server_data['data']['attributes']['status']
     await ctx.send(f'{server_name} is {server_status}')
 
 # @bot.command()
