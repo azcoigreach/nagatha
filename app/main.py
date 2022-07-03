@@ -74,7 +74,7 @@ async def vrising(ctx):
 @vrising.command(name='settings')
 async def _settings(ctx):
     """server details"""
-    await ctx.send(f"'''{ctx.server_settings}'''")
+    await ctx.send(ctx.server_settings})
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
