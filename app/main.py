@@ -8,6 +8,7 @@ import discord
 from discord.ext import commands
 import random
 from io import BytesIO
+import prettyprint as pp
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
@@ -76,7 +77,8 @@ async def vrising(ctx):
 @vrising.command(name='settings')
 async def _settings(ctx):
     """server settings"""
-    await ctx.send(file=discord.File(BytesIO(str(ctx.server_settings).encode('utf-8')), filename='settings.json'))
+    pprint_data = pp(ctx.server_settings).encode('utf-8')
+    await ctx.send(file=discord.File(BytesIO(pprint_data), filename='settings.json'))
 
 
 
