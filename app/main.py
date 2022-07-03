@@ -10,7 +10,6 @@ import random
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
-
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
 
