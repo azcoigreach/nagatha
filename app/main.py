@@ -41,12 +41,19 @@ async def on_ready():
     print('------')
 
 
-@bot.command()
+@bot.group()
 async def vrising(ctx):
-    """v-rising stats"""
+    """v-rising server info"""
     server_data = get_battlemetrics_data()
     print(server_data)
     await ctx.send(server_data['data']['attributes']['name'])
+
+@vrising.command(name='status')
+async def _status(ctx):
+    """server status"""
+    server_name = get_battlemetrics_data()['data']['attributes']['name']
+    server_status = get_battlemetrics_data()['data']['attributes']['status']
+    await ctx.send(f'{server_name} is {server_status}')
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
