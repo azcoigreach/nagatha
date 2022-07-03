@@ -56,7 +56,7 @@ async def vrising(ctx):
     ctx.server_maxPlayers = server_data['data']['attributes']['maxPlayers']
     ctx.server_rank = server_data['data']['attributes']['rank']
     ctx.server_status = server_data['data']['attributes']['status']
-    ctx.server_settings = server_data['data']['attributes']['details']['settings']
+    ctx.server_settings = server_data['data']['attributes']['details']['vrising_settings']
 
 
     if ctx.invoked_subcommand is None:
