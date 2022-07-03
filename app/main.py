@@ -73,8 +73,7 @@ async def vrising(ctx):
 # retrieve vrising_settings from battlemetrics.com and send it in a discord as a file
 @vrising.command(name='settings')
 async def _settings(ctx):
-    """server details"""
-    ctx.server_settings = server_data['data']['attributes']['details']['vrising_settings']
+    """server settings"""
     await ctx.send(file=discord.File(fp=ctx.server_settings, filename='vrising_settings.json'))
 
 # @bot.command()
