@@ -42,7 +42,7 @@ async def on_ready():
 
 
 @bot.command()
-async def add(ctx):
+async def vrising(ctx):
     """v-rising stats"""
     await ctx.send(get_battlemetrics_data()['data']['attributes']['name'])
 
