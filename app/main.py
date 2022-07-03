@@ -50,13 +50,13 @@ async def invite(ctx):
 async def vrising(ctx):
     """v-rising server info"""
     server_data = get_battlemetrics_data()
-    ctx.server_name = server_data['name']
-    ctx.server_id = server_data['id']
-    ctx.server_players = server_data['players']
-    ctx.server_maxPlayers = server_data['maxPlayers']
-    ctx.server_rank = server_data['rank']
-    ctx.server_status = server_data['status']
-    ctx.server_details = server_data['details']
+    ctx.server_name = server_data['data']['attributes']['name']
+    ctx.server_id = server_data['data']['id']
+    ctx.server_players = server_data['data']['attributes']['players']
+    ctx.server_maxPlayers = server_data['data']['attributes']['maxPlayers']
+    ctx.server_rank = server_data['data']['attributes']['rank']
+    ctx.server_status = server_data['data']['attributes']['status']
+    ctx.server_details = server_data['data']['attributes']['details']
 
 
     if ctx.invoked_subcommand is None:
