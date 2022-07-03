@@ -82,7 +82,7 @@ async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})\nVersion: {discord.__version__}\n')
     print('------')
     # change discord presence
-    await bot.change_presence(activity=discord.Game(name="Taking over the world!"))
+    await bot.change_presence(activity=discord.Game(name="nagatha help"))
     print(f'Successfully logged in and booted...!')
 
 bot.run(settings.DISCORD_TOKEN)
