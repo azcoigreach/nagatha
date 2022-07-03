@@ -51,17 +51,30 @@ async def vrising(ctx):
     """v-rising server info"""
     server_data = get_battlemetrics_data()
     ctx.server_name = server_data['name']
+    ctx.server_id = server_data['id']
+    ctx.server_players = server_data['players']
+    ctx.server_maxPlayers = server_data['maxPlayers']
+    ctx.server_rank = server_data['rank']
+    ctx.server_status = server_data['status']
+    ctx.server_details = server_data['details']
+
+
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title=ctx.server_name, description="", color=0x00ff00)
+        embed = discord.Embed(title=ctx.server_name,
+        description="Game server status", 
+        color=0x00ff00,
+        url="https://battlemetrics.com/servers/vrising/15443201")
+        embed.add_field(name="Status", value=ctx.server_status, inline=True)
+        embed.add_field(name="Server ID", value=ctx.server_id, inline=True)
+        embed.add_field(name="Players", value=f"{ctx.server_players} of {ctx.server_maxPlayers}", inline=True)
+        embed.add_field(name="Rank", value=ctx.server_rank, inline=True)
         await ctx.send(embed=embed)
 
 # server status group command
-@vrising.command(name='status')
-async def _status(ctx):
-    """server status"""
-    server_name = ctx.server_data['data']['attributes']['name']
-    server_status = ctx.server_data['data']['attributes']['status']
-    await ctx.send(f'{server_name} is {server_status}')
+@vrising.command(name='details')
+async def _details(ctx):
+    """server details"""
+    await ctx.send(f"'''{ctx.server_details}'''")
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
