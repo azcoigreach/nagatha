@@ -70,11 +70,12 @@ async def vrising(ctx):
         embed.add_field(name="Rank", value=ctx.server_rank, inline=True)
         await ctx.send(embed=embed)
 
-# server status group command
+# retrieve vrising_settings from battlemetrics.com and send it in a discord as a file
 @vrising.command(name='settings')
 async def _settings(ctx):
     """server details"""
-    await ctx.send("Hello Dear, this isn't working yet.")
+    ctx.server_settings = server_data['data']['attributes']['details']['vrising_settings']
+    await ctx.send(file=discord.File(fp=ctx.server_settings, filename='vrising_settings.json'))
 
 # @bot.command()
 # async def add(ctx, left: int, right: int):
