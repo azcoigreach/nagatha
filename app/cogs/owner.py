@@ -5,7 +5,7 @@ class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    # Hidden means it won't show up on the default help.
+    # Hidden commands - not visible in HELP.
     @commands.command(name='load', hidden=True)
     @commands.is_owner()
     async def load(self, ctx, *, cog: str):
