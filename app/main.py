@@ -1,9 +1,10 @@
 # Get server data from the battlemetrics.com API and send it in a Discord.
 # techstack: Python3, discord.py, requests, battlemetrics.com, io, pydantic, json
-import sys, traceback
+import sys, traceback, requests, json
 from app.config import settings
 import discord
 from discord.ext import commands
+
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
@@ -30,7 +31,7 @@ initial_extensions = [
     'app.cogs.owner',
     'app.cogs.members',
     'app.cogs.simple',
-    'app.cogs.server',
+    'app.cogs.battlemetrics',
     'app.cogs.crypto'
     ]
 

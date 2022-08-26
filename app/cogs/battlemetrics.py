@@ -34,8 +34,8 @@ class ServerInfo(commands.Cog):
         return server_leaderboard
 
     @commands.group()
-    async def vrising(self, ctx):
-        """v-rising server info"""
+    async def server(self, ctx):
+        """battlemetrics server info"""
         server_info = self.get_server_info()
         ctx.server_name = server_info['data']['attributes']['name']
         ctx.server_id = server_info['data']['id']
@@ -56,13 +56,13 @@ class ServerInfo(commands.Cog):
             embed.add_field(name="Rank", value=ctx.server_rank, inline=True)
             await ctx.send(embed=embed)
 
-    @vrising.command(name='settings')
+    @server.command(name='settings')
     async def _settings(self, ctx):
         """server settings"""
         pprint_data = pp(ctx.server_settings).encode('utf-8')
         await ctx.send(file=discord.File(BytesIO(pprint_data), filename='settings.json'))
 
-    @vrising.command(name='leaderboard')
+    @server.command(name='leaderboard')
     async def _players(self, ctx):
         """server leaderboard"""
         url = "https://api.battlemetrics.com/servers/{}/relationships/leaderboards/time".format(settings.SERVER_ID)

@@ -11,9 +11,10 @@ A multifunction python discord bot
   - Monitors for server status changes
   - Notification of server events
 - Crypto prices notifications
+- Dockerize
 
 # Deployment
 
-
+```python -m app.main```
 
 # Commands
