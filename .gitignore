@@ -12,7 +12,6 @@
 *.egg-info/
 venv/
 .env
-docker-compose.yml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
