@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     SERVER_ID: int
     DISCORD_TOKEN: str
     GUILD_ID: int
+
+    SYSTEM_ADMIN_IDS: list[int] = []
     
     class Config:
         env_file = ".env"

@@ -1,52 +1,40 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
-
-
-"""A simple cog example with simple commands. Showcased here are some check decorators, and the use of events in cogs.
-
-For a list of inbuilt checks:
-http://dischttp://discordpy.readthedocs.io/en/rewrite/ext/commands/api.html#checksordpy.readthedocs.io/en/rewrite/ext/commands/api.html#checks
-
-You could also create your own custom checks. Check out:
-https://github.com/Rapptz/discord.py/blob/master/discord/ext/commands/core.py#L689
-
-For a list of events:
-http://discordpy.readthedocs.io/en/rewrite/api.html#event-reference
-http://discordpy.readthedocs.io/en/rewrite/ext/commands/api.html#event-reference
-"""
-
+import logging
 
 class Simple(commands.Cog):
-    """SimpleCog"""
-
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.logger = logging.getLogger(__name__)
+        self.logger.info('Simple cog loaded')
 
-    @commands.command(name='repeat', aliases=['copy', 'mimic'])
-    async def do_repeat(self, ctx, *, our_input: str):
+    @app_commands.command(name='repeat')
+    async def do_repeat(self, interaction: discord.Interaction, *, our_input: str) -> None:
         """A simple command which repeats our input.
         In rewrite Context is automatically passed to our commands as the first argument after self."""
 
-        await ctx.send(our_input)
+        await interaction.response.send_message(our_input)
 
-    @commands.command(name='add', aliases=['plus'])
+    @app_commands.command(name='add')
     @commands.guild_only()
-    async def do_addition(self, ctx, first: int, second: int):
+    async def do_addition(self, interaction: discord.Interaction, first: int, second: int) -> None:
         """A simple command which does addition on two integer values."""
 
         total = first + second
-        await ctx.send(f'The sum of **{first}** and **{second}**  is  **{total}**')
+        await interaction.response.send_message(f'The sum of **{first}** and **{second}**  is  **{total}**')
 
-    @commands.command(name='me')
+    @app_commands.command(name='me')
     @commands.is_owner()
-    async def only_me(self, ctx):
+    async def only_me(self, interaction: discord.Interaction) -> None:
         """A simple command which only responds to the owner of the bot."""
 
-        await ctx.send(f'Hello {ctx.author.mention}. This command can only be used by you!!')
 
-    @commands.command(name='embeds')
+        await interaction.response.send_message(f'Hello {interaction.user.name}#{interaction.user.discriminator}. This command can only be used by you!!')
+
+    @app_commands.command(name='embeds')
     @commands.guild_only()
-    async def example_embed(self, ctx):
+    async def example_embed(self, interaction: discord.Interaction) -> None:
         """A simple command which showcases the use of embeds.
 
         Have a play around and visit the Visualizer."""
@@ -60,13 +48,13 @@ class Simple(commands.Cog):
         embed.set_image(url='https://cdn.discordapp.com/attachments/84319995256905728/252292324967710721/embed.png')
 
         embed.add_field(name='Embed Visualizer', value='[Click Here!](https://leovoel.github.io/embed-visualizer/)')
-        embed.add_field(name='Command Invoker', value=ctx.author.mention)
+        embed.add_field(name='Command Invoker', value=interaction.user.mention)
         embed.set_footer(text='Made in Python with discord.py@rewrite', icon_url='http://i.imgur.com/5BFecvA.png')
 
-        await ctx.send(content='**A simple Embed for discord.py@rewrite in cogs.**', embed=embed)
+        await interaction.response.send_message(content='**A simple Embed for discord.py@rewrite in cogs.**', embed=embed)
     
     @commands.Cog.listener()
-    async def on_member_ban(self, guild, user):
+    async def on_member_ban(self, guild, user) -> None:
         """Event Listener which is called when a user is banned from the guild.
         For this example I will keep things simple and just print some info.
         Notice how because we are in a cog class we do not need to use @bot.event
@@ -77,9 +65,9 @@ class Simple(commands.Cog):
         Check above for a list of events.
         """
 
-        print(f'{user.name}-{user.id} was banned from {guild.name}-{guild.id}')
+        logging.warning(f'{user.name}-{user.id} was banned from {guild.name}-{guild.id}')
 
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case SimpleCog.
 # When we load the cog, we use the name of the file.
-def setup(bot):
-    bot.add_cog(Simple(bot))
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(Simple(bot))
