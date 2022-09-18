@@ -19,6 +19,8 @@ class Settings(BaseSettings):
 
     YOUTUBE_GUILD_IDS: list[int] = []
 
+    BETHESDA_GUILD_IDS: list[int] = []
+
     class Config:
         env_file = ".env"
 

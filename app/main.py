@@ -44,6 +44,7 @@ initial_extensions = [
     'app.cogs.battlemetrics',
     'app.cogs.crypto',
     'app.cogs.youtube',
+    'app.cogs.bethesda',
     ]
 
 # declare intents
