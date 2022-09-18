@@ -12,9 +12,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 
 # This example requires the 'members' and 'message_content' privileged intents to function.
 
-description = '''Nagatha is a multi-function discord bot.
- - Retrieve server data from battlemetrics.com
- - Retrieve crypto currency data from binance.us'''
+description = '''
+Nagatha is a work in progressand currently in development by @azcoigreach#0001
+Use the (/) slash command to see a list of commands.
+If you would like to have your own module writen for Nagatha, please contact @azcoigreach#0001
+Current modules include:
+ - /battlemetrics - Retrieve server data from battlemetrics.com
+ - /crypto - Retrieve crypto currency data from binance.us
+ - /help - Get help using Nagatha
+ '''
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -36,13 +42,26 @@ initial_extensions = [
     'app.cogs.members',
     'app.cogs.simple',
     'app.cogs.battlemetrics',
-    'app.cogs.crypto'
+    'app.cogs.crypto',
+    'app.cogs.youtube',
     ]
 
 # declare intents
 intents = discord.Intents.default()
 intents.message_content = True
 # intents.members = True
+
+def is_system_admin():
+        def predicate(interaction: discord.Interaction) -> bool:
+            if interaction.user.id in settings.SYSTEM_ADMIN_IDS:
+                logging.info(f'is_system_admin check passed by user_id:{interaction.user.id}')
+                return True
+            else:
+                logging.error(f'is_system_admin check failed by user_id:{interaction.user.id}')
+                raise app_commands.CheckFailure("I'm sorry Dear. You are not a system admin.")
+
+                # return False
+        return app_commands.check(predicate)
 
 
 NAGATHA_GUILD = discord.Object(id=settings.GUILD_ID)
@@ -53,21 +72,23 @@ class NagathaClient(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
+        logging.info('setup_hook initiated')
         self.tree.copy_global_to(guild=NAGATHA_GUILD)
-        await self.tree.sync(guild=NAGATHA_GUILD)
-        logging.info('Global commands synced')
+        await self.tree.sync(guild=None)
+        
 
 bot = NagathaClient(description=description)
 bot = commands.Bot(command_prefix=get_prefix, description=description, intents=intents)
 
+
 # discord invite: https://discord.gg/pM4Z8jjG2y
 # bot invite link: https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot
-# @bot.tree.command()
-# async def invite(interaction: discord.Interaction):
-#     """Invite and support links"""
-#     bot_link = "https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot"
-#     support_link = "https://discord.gg/pM4Z8jjG2y"
-#     await interaction.response.send_message(f"Invite Nagatha to your Discord: {bot_link}\nJoin the support server: {support_link}")
+@bot.tree.command()
+async def support(interaction: discord.Interaction):
+    '''Support for Nagatha'''
+    # bot_link = "https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot"
+    support_link = "https://discord.gg/pM4Z8jjG2y"
+    await interaction.response.send_message(f"Nagatha is a custom Bot and constant under development.\nJoin the support server: {support_link}\nPlease report any bugs or issues to @azcoigreach#0001")
 
 # Ping Nagatha to make sure she's awake
 @bot.tree.command()
@@ -88,10 +109,12 @@ async def cat(interaction: discord.Interaction):
     embed.set_image(url=data['results'][0]['media'][0]['gif']['url'])
     await interaction.response.send_message(embed=embed)
 
-# Sync bot commands to discord
-# only works in guild with id = settings.GUILD_ID
+# # Sync bot commands to discord
+# # only works in guild with id = settings.SYSTEM_ADMIN_GUILD_IDS
 # @bot.tree.command()
-# @app_commands.guilds(discord.Object(id=settings.GUILD_ID))
+# # @app_commands.guilds(discord.Object(guild_ids=settings.SYSTEM_ADMIN_GUILD_IDS))
+
+# @is_system_admin()
 # async def sync_commands(interaction: discord.Interaction):
 #     """Sync bot commands to discord"""
 #     await bot.tree.sync(guild=None)
@@ -100,13 +123,22 @@ async def cat(interaction: discord.Interaction):
 
 @bot.event
 async def on_ready():
-    logging.info(f'Logged in as {bot.user} (ID: {bot.user.id})\nVersion: {discord.__version__}\n')
-    # print('------')
-    # change discord presence
     await bot.change_presence(activity=discord.Game(name="How may I help you?"))
-    # sync commands to discord
-    await bot.tree.sync(guild=None)
-    logging.info(f'Successfully logged in and booted...!')
+    logging.info(f'Bot Ready - Version: {discord.__version__}')
+    logging.info(f'Logged in as: {bot.user.name} - {bot.user.id}')
+    logging.info(f'Connected to {len(bot.guilds)} guilds:')
+    bot.tree.copy_global_to(guild=NAGATHA_GUILD)
+    for guild in bot.guilds:
+        await bot.tree.sync(guild=discord.Object(id=guild.id))
+        logging.info(f'Synced - {guild.name} - {guild.id}')
+    # bot.tree.copy_global_to(guild=NAGATHA_GUILD)
+    # await bot.tree.sync(guild=None)
+    # list commands in tree
+    # logging.info('Commands in tree:')
+    # for command in bot.tree.fetch_commands():
+    #     logging.info(f'{command.name} - {command.description}')
+    logging.info('--OK--')
+
 
 async def load_extentions():
     logging.info("Loading extensions...") # make bright red
@@ -119,8 +151,13 @@ async def load_extentions():
 
 async def main():
     async with bot:
+        logging.info("Starting bot...")
         await load_extentions()
         await bot.start(settings.DISCORD_TOKEN)
+        # await bot.login(settings.DISCORD_TOKEN)
+        # await bot.connect()
+        # # await bot.setup_hook()
+        # logging.info("Bot started")
         
 
 asyncio.run(main())

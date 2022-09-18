@@ -1,3 +1,4 @@
+from app.config import settings
 import requests
 import json
 import discord
@@ -12,7 +13,7 @@ class Crypto(commands.Cog):
         self.logger = logging.getLogger(__name__)
         self.logger.info('Crypto cog loaded')
 
-    group = app_commands.Group(name='crypto', description='Crypto currency data')
+    group = app_commands.Group(name='crypto', description='Crypto currency data', guild_ids=settings.CRYPTO_GUILD_IDS)
 
     @group.command(name='top')
     async def markets(self, interaction: discord.Interaction):

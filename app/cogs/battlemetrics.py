@@ -19,7 +19,7 @@ class Battlemetrics(commands.Cog):
         self.logger = logging.getLogger(__name__)
         self.logger.info('battlemetrics cog loaded')
 
-    group = app_commands.Group(name='battlemetrics', description='battlemetrics.com server info')
+    group = app_commands.Group(name='battlemetrics', description='battlemetrics.com server info', guild_ids=settings.BATTLEMETRICS_GUILD_IDS)
 
     '''
     Get battalemetrics game list and return a list of games by page with a max of 10 games per page
