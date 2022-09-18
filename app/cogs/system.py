@@ -18,12 +18,10 @@ class System(commands.Cog):
             else:
                 logging.error(f'is_system_admin check failed by user_id:{interaction.user.id}')
                 raise app_commands.CheckFailure("I'm sorry Dear. You are not a system admin.")
-
-                # return False
         return app_commands.check(predicate)
 
 
-    group = app_commands.Group(name='module', description='System module commands')
+    group = app_commands.Group(name='module', description='System module commands', guild_ids=settings.SYSTEM_ADMIN_GUILD_IDS)
 
     # Hidden commands - not visible in HELP.
     @group.command(name='load')
@@ -36,8 +34,6 @@ class System(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(f'**`ERROR:`** {type(e).__name__} - {e}', ephemeral=True)
         else:
-            # sync slash commands
-            await self.bot.tree.sync()
             await interaction.response.send_message(f'**`SUCCESS`**: Loaded {cog}', ephemeral=True)
             
 
@@ -50,10 +46,7 @@ class System(commands.Cog):
            await self.bot.unload_extension(cog)
         except Exception as e:
             await interaction.response.send_message(f'**`ERROR:`** {type(e).__name__} - {e}', ephemeral=True)
-            # await ctx.send(f'**`ERROR:`** {type(e).__name__} - {e}')
         else:
-            # sync slash commands
-            await self.bot.tree.sync()
             await interaction.response.send_message(f'**`SUCCESS`**: Unloaded {cog}', ephemeral=True)
             
     '''
@@ -69,22 +62,19 @@ class System(commands.Cog):
             await self.bot.reload_extension(cog)
         except Exception as e:
             await interaction.response.send_message(f'**`ERROR:`** {type(e).__name__} - {e}', ephemeral=True)
-           
         else:
-            # sync slash commands
-            await self.bot.tree.sync()
             await interaction.response.send_message(f'**`SUCCESS`**: Reloaded {cog}', ephemeral=True)
             
-    # # Sync bot commands to discord
-    # # only works in guild with id = settings.GUILD_ID
-    # @group.command(name='sync')
-    # # @app_commands.guilds(discord.Object(id=settings.GUILD_ID))
-    # @is_system_admin()
-    # async def sync_commands(self, interaction: discord.Interaction):
-    #     """Sync bot commands to discord"""
-    #     await self.bot.tree.sync()
-    #     await interaction.response.send_message('Commands synced')
-    #     logging.info('Commands synced')
+
+    
+    @group.command(name='sync')
+    @is_system_admin()
+    async def sync_commands(self, interaction: discord.Interaction):
+        """Sync bot commands to discord"""
+        for guild in self.bot.guilds:
+            await self.bot.tree.sync(guild=discord.Object(id=guild.id))
+            logging.info(f'Synced - {guild.name} - {guild.id}')
+        logging.info('Commands synced')
 
 
 async def setup(bot):
