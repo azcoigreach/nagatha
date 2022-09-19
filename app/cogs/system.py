@@ -71,9 +71,13 @@ class System(commands.Cog):
     @is_system_admin()
     async def sync_commands(self, interaction: discord.Interaction):
         """Sync bot commands to discord"""
+        logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
+        # bot.tree.copy_global_to(guild=NAGATHA_GUILD)
         for guild in self.bot.guilds:
             await self.bot.tree.sync(guild=discord.Object(id=guild.id))
             logging.info(f'Synced - {guild.name} - {guild.id}')
+        await interaction.response.send_message(f'**`SUCCESS`**: Synced commands to {len(self.bot.guilds)} guilds', ephemeral=True)
+
         logging.info('Commands synced')
 
 

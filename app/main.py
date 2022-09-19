@@ -50,8 +50,8 @@ initial_extensions = [
 # declare intents
 intents = discord.Intents.default()
 intents.message_content = True
-# intents.members = True
 
+# checks
 def is_system_admin():
         def predicate(interaction: discord.Interaction) -> bool:
             if interaction.user.id in settings.SYSTEM_ADMIN_IDS:
@@ -65,8 +65,6 @@ def is_system_admin():
         return app_commands.check(predicate)
 
 
-NAGATHA_GUILD = discord.Object(id=settings.GUILD_ID)
-
 class NagathaClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(intents=intents, *args, **kwargs)
@@ -74,10 +72,11 @@ class NagathaClient(discord.Client):
 
     async def setup_hook(self):
         logging.info('setup_hook initiated')
-        self.tree.copy_global_to(guild=NAGATHA_GUILD)
-        await self.tree.sync(guild=None)
+        pass
+        # self.tree.copy_global_to(guild=NAGATHA_GUILD)
+        # await self.tree.sync(guilds=discord.Object(ids=settings.REGISTERED_GUILD_IDS))
         
-
+# init bot
 bot = NagathaClient(description=description)
 bot = commands.Bot(command_prefix=get_prefix, description=description, intents=intents)
 
@@ -110,39 +109,21 @@ async def cat(interaction: discord.Interaction):
     embed.set_image(url=data['results'][0]['media'][0]['gif']['url'])
     await interaction.response.send_message(embed=embed)
 
-# # Sync bot commands to discord
-# # only works in guild with id = settings.SYSTEM_ADMIN_GUILD_IDS
-# @bot.tree.command()
-# # @app_commands.guilds(discord.Object(guild_ids=settings.SYSTEM_ADMIN_GUILD_IDS))
-
-# @is_system_admin()
-# async def sync_commands(interaction: discord.Interaction):
-#     """Sync bot commands to discord"""
-#     await bot.tree.sync(guild=None)
-#     await interaction.response.send_message('Commands synced')
-#     logging.info('Commands synced')
-
+# ON READY
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name="How may I help you?"))
     logging.info(f'Bot Ready - Version: {discord.__version__}')
     logging.info(f'Logged in as: {bot.user.name} - {bot.user.id}')
     logging.info(f'Connected to {len(bot.guilds)} guilds:')
-    bot.tree.copy_global_to(guild=NAGATHA_GUILD)
     for guild in bot.guilds:
         await bot.tree.sync(guild=discord.Object(id=guild.id))
         logging.info(f'Synced - {guild.name} - {guild.id}')
-    # bot.tree.copy_global_to(guild=NAGATHA_GUILD)
-    # await bot.tree.sync(guild=None)
-    # list commands in tree
-    # logging.info('Commands in tree:')
-    # for command in bot.tree.fetch_commands():
-    #     logging.info(f'{command.name} - {command.description}')
     logging.info('--OK--')
 
-
+# load cogs
 async def load_extentions():
-    logging.info("Loading extensions...") # make bright red
+    logging.info("Loading extensions...")
     for extension in initial_extensions:
         try:
             await bot.load_extension(extension)
@@ -150,16 +131,12 @@ async def load_extentions():
             logging.error(f'Failed to load extension {extension}.', exc_info=e)
             traceback.print_exc()
 
+# MAIN
 async def main():
     async with bot:
         logging.info("Starting bot...")
         await load_extentions()
         await bot.start(settings.DISCORD_TOKEN)
-        # await bot.login(settings.DISCORD_TOKEN)
-        # await bot.connect()
-        # # await bot.setup_hook()
-        # logging.info("Bot started")
-        
 
 asyncio.run(main())
 

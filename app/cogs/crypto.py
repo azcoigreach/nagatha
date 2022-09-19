@@ -16,7 +16,7 @@ class Crypto(commands.Cog):
     group = app_commands.Group(name='crypto', description='Crypto currency data', guild_ids=settings.CRYPTO_GUILD_IDS)
 
     @group.command(name='top')
-    async def markets(self, interaction: discord.Interaction):
+    async def markets(self, interaction: discord.Interaction) -> None:
         """Top 10 crypto coins markets"""
         url = "https://api.binance.us/api/v3/ticker/24hr"
         logging.info(f"Connecting to {url}")
