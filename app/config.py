@@ -21,6 +21,8 @@ class Settings(BaseSettings):
 
     BETHESDA_GUILD_IDS: list[int] = []
 
+    STEAM_GUILD_IDS: list[int] = []
+
     class Config:
         env_file = ".env"
 

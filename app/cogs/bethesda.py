@@ -40,7 +40,7 @@ class Bethesda(commands.Cog):
     
 
     # YouTube commands.  Music. Videos. Channel notifications.
-    group = app_commands.Group(name='todd', description='Bethesda discord commands', guild_ids=settings.YOUTUBE_GUILD_IDS)
+    group = app_commands.Group(name='todd', description='Bethesda discord commands', guild_ids=settings.BETHESDA_GUILD_IDS)
 
     '''
     who am i today? RNG charecter generator for Fallout 76 PVP
