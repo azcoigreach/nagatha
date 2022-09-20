@@ -73,13 +73,34 @@ class System(commands.Cog):
         """Sync bot commands to discord"""
         logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
         # bot.tree.copy_global_to(guild=NAGATHA_GUILD)
+        # defer response
+        await interaction.response.defer(ephemeral=True)
+        self.bot.tree.clear_commands(guild=None)
         for guild in self.bot.guilds:
+            # self.bot.tree.clear_commands(guild=discord.Object(id=guild.id))
             await self.bot.tree.sync(guild=discord.Object(id=guild.id))
             logging.info(f'Synced - {guild.name} - {guild.id}')
-        await interaction.response.send_message(f'**`SUCCESS`**: Synced commands to {len(self.bot.guilds)} guilds', ephemeral=True)
-
+        
+        await interaction.followup.send(f'**`SUCCESS`**: Synced commands to {len(self.bot.guilds)} guilds', ephemeral=True)
         logging.info('Commands synced')
 
+    # get command tree list
+    @group.command(name='get_tree')
+    @is_system_admin()
+    async def get_tree(self, interaction: discord.Interaction):
+        """Get bot command tree"""
+        logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
+        for guild in self.bot.guilds:
+            logging.info(f'Guild: {guild.name} - {guild.id}')
+            command_list = self.bot.tree.get_commands(guild=discord.Object(id=guild.id))
+            for command in command_list:
+                # display List[Union[ContextMenu, Command, Group]]
+                logging.info(f'Command: {command.name} - {command.description}')
+                if isinstance(command, discord.app_commands.Group):
+                    for subcommand in command.commands:
+                        logging.info(f'  Subcommand: {subcommand.name} - {subcommand.description}')
+        await interaction.response.send_message(f'**`SUCCESS`**: Got command tree for {len(self.bot.guilds)} guilds', ephemeral=True)
 
+    
 async def setup(bot):
     await bot.add_cog(System(bot))
