@@ -75,9 +75,9 @@ class System(commands.Cog):
         # bot.tree.copy_global_to(guild=NAGATHA_GUILD)
         # defer response
         await interaction.response.defer(ephemeral=True)
-        self.bot.tree.clear_commands(guild=None)
+        # self.bot.tree.clear_commands(guild=None)
         for guild in self.bot.guilds:
-            # self.bot.tree.clear_commands(guild=discord.Object(id=guild.id))
+            self.bot.tree.clear_commands(guild=discord.Object(id=guild.id))
             await self.bot.tree.sync(guild=discord.Object(id=guild.id))
             logging.info(f'Synced - {guild.name} - {guild.id}')
         
