@@ -5,8 +5,9 @@ class Settings(BaseSettings):
     API_KEY: str
     GAME_ID: str
     SERVER_ID: int
+    
     DISCORD_TOKEN: str
-    GUILD_ID: int
+    NAGATHA_GUILD_ID: int
 
     REGISTERED_GUILD_IDS: list[int] = []
 

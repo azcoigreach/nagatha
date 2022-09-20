@@ -72,9 +72,9 @@ class NagathaClient(discord.Client):
 
     async def setup_hook(self):
         logging.info('setup_hook initiated')
-        pass
-        # self.tree.copy_global_to(guild=NAGATHA_GUILD)
-        # await self.tree.sync(guilds=discord.Object(ids=settings.REGISTERED_GUILD_IDS))
+        # pass
+        self.tree.copy_global_to(guild=discord.Object(id=settings.NAGATHA_GUILD_ID))
+        await self.tree.sync(guilds=discord.Object(ids=settings.REGISTERED_GUILD_IDS))
         
 # init bot
 bot = NagathaClient(description=description)
