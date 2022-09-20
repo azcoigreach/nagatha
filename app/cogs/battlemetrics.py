@@ -12,17 +12,15 @@ import prettyprint as pp
 Reference: https://www.battlemetrics.com/developers/documentation
 '''
 
-
-
 class Battlemetrics(commands.Cog):
     """battlemetrics.com server info"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.logger.info('battlemetrics cog loaded')
+        self.logger.info('Battlemetrics cog loaded')
 
     group = app_commands.Group(name='battlemetrics', description='battlemetrics.com server info', guild_ids=settings.BATTLEMETRICS_GUILD_IDS)
-
+    # group = app_commands.Group(name='battlemetrics', description='battlemetrics.com server info')
     class BattleMetricsView(discord.ui.View):
         def __init__(self, data: dict):
             super().__init__(timeout=60.0)
@@ -31,7 +29,6 @@ class Battlemetrics(commands.Cog):
 
         @discord.ui.button(label="Previous", custom_id="bm:prev", style=discord.ButtonStyle.grey)
         async def prev(self, button: discord.ui.Button, interaction: discord.Interaction):
-
             updated_data = await self.get_game_list(self, self.data['links']['prev'])
             updated_embed = await self.game_list_embed(updated_data)
             await interaction.response.edit_message(embed=updated_embed ,view=self)
@@ -42,58 +39,6 @@ class Battlemetrics(commands.Cog):
             updated_data = await self.get_game_list(self, self.data['links']['next'])
             updated_embed = await self.game_list_embed(updated_data)
             await interaction.response.edit_message(embed=updated_embed ,view=self)
-            # await interaction.response.edit_message('Next')
-
-
-            # if 'prev' not in self.data['links']:
-            #     self.add_item(discord.ui.Button(label='Previous', custom_id='prev', disabled=True))
-            # else:
-            #     self.add_item(discord.ui.Button(label='Previous', custom_id='prev'))
-
-            # if 'next' not in self.data['links']:
-            #     self.add_item(discord.ui.Button(label='Next', custom_id='next', disabled=True))
-            # else:
-            #     self.add_item(discord.ui.Button(label='Next', custom_id='next'))
-
-            # if 'next' not in self.data['links']:
-            #     @discord.ui.button(label="Next", custom_id="bm:next", disabled=True)
-            #     async def next(self, button: discord.ui.Button, interaction: discord.Interaction):
-            #         pass
-
-            # else:
-            #     @discord.ui.button(label="Next", custom_id="bm:next")
-            #     async def next(self, button: discord.ui.Button, interaction: discord.Interaction):
-            #         updated_data = await self.update_data(self.data['links']['next'])
-            #         await interaction.response.edit_message(embed=Battlemetrics.game_list_embed(updated_data) ,view=self)
-
-
-
-            # # if self.data is not None:
-            # logging.info(f"BattleMetricsView data: {self.data}")
-            # if 'prev' not in self.view.data['links']:
-            #     # self.add_item(discord.ui.Button(label="Prev", disabled=True))
-            #     @discord.ui.button(label="Previous", custom_id="bm:prev" ,disabled=True)
-            #     async def prev(self, button: discord.ui.Button, interaction: discord.Interaction):
-            #         pass
-                
-            # else:
-            #     @discord.ui.button(label="Previous", custom_id="bm:prev")
-            #     async def prev(self, button: discord.ui.Button, interaction: discord.Interaction):
-            #         updated_data = await Battlemetrics.get_game_list(self, self.data['links']['prev'])
-            #         updated_embed = await Battlemetrics.game_list_embed(updated_data)
-            #         await interaction.response.edit_message(embed=updated_embed ,view=self)
-
-            # if 'next' not in self.data['links']:
-            #     @discord.ui.button(label="Next", custom_id="bm:next", disabled=True)
-            #     async def next(self, button: discord.ui.Button, interaction: discord.Interaction):
-            #         pass
-
-            # else:
-            #     @discord.ui.button(label="Next", custom_id="bm:next")
-            #     async def next(self, button: discord.ui.Button, interaction: discord.Interaction):
-            #         updated_data = await self.update_data(self.data['links']['next'])
-            #         await interaction.response.edit_message(embed=Battlemetrics.game_list_embed(updated_data) ,view=self)
-
 
     async def get_game_list(self, url, interaction: discord.Interaction) -> None:
         try:
@@ -142,7 +87,7 @@ class Battlemetrics(commands.Cog):
             embed = await self.game_list_embed(data)
             view = Battlemetrics.BattleMetricsView(data)
             logging.info(f"Sending embed to {interaction.user} in {interaction.channel}")
-            await interaction.followup.send(embed=embed, view=view ,ephemeral=True)
+            await interaction.followup.send(embed=embed, view=view, ephemeral=True)
             # await view.wait()
         except Exception as e:
             logging.error(e)
@@ -151,6 +96,6 @@ class Battlemetrics(commands.Cog):
 
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Battlemetrics(bot))
+    await bot.add_cog(Battlemetrics(bot), override=True)
 
 

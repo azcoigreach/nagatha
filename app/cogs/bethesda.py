@@ -41,6 +41,7 @@ class Bethesda(commands.Cog):
 
     # Todd commands.  The new and improved Todd Bot - he is actually usefull now.
     group = app_commands.Group(name='todd', description='Bethesda discord commands', guild_ids=settings.BETHESDA_GUILD_IDS)
+    # group = app_commands.Group(name='todd', description='Bethesda discord commands')
 
     '''
     who am i today? RNG charecter generator for Fallout 76 PVP
@@ -123,4 +124,4 @@ class Bethesda(commands.Cog):
 
 # add commands to cog
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Bethesda(bot))
+    await bot.add_cog(Bethesda(bot), override=True)

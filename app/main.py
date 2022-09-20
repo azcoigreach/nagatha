@@ -39,12 +39,13 @@ def get_prefix(bot, message):
 # list of folders our cogs are in
 initial_extensions = [
     'app.cogs.system',
-    'app.cogs.members',
-    'app.cogs.simple',
     'app.cogs.battlemetrics',
     'app.cogs.crypto',
-    'app.cogs.youtube',
     'app.cogs.bethesda',
+    'app.cogs.youtube',
+    'app.cogs.steam',
+    # 'app.cogs.members',
+    # 'app.cogs.simple',
     ]
 
 # declare intents
@@ -71,10 +72,10 @@ class NagathaClient(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        logging.info('setup_hook initiated')
-        # pass
-        self.tree.copy_global_to(guild=discord.Object(id=settings.NAGATHA_GUILD_ID))
-        await self.tree.sync(guilds=discord.Object(ids=settings.REGISTERED_GUILD_IDS))
+        # logging.info('setup_hook initiated')
+        pass
+        # self.tree.copy_global_to(guild=discord.Object(id=settings.NAGATHA_GUILD_ID))
+        # await self.tree.sync(guilds=discord.Object(ids=settings.REGISTERED_GUILD_IDS))
         
 # init bot
 bot = NagathaClient(description=description)

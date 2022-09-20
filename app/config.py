@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     SYSTEM_ADMIN_IDS: list[int] = []
     SYSTEM_ADMIN_GUILD_IDS: list[int] = []
 
+    MEMBERS_GUILD_IDS: list[int] = []
+    SIMPLE_GUILD_IDS: list[int] = []
+
     BATTLEMETRICS_GUILD_IDS: list[int] = []
 
     CRYPTO_GUILD_IDS: list[int] = []

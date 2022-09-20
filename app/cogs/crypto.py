@@ -48,4 +48,4 @@ class Crypto(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=False)
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Crypto(bot))
+    await bot.add_cog(Crypto(bot), override=True)

@@ -71,4 +71,4 @@ class Simple(commands.Cog):
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case SimpleCog.
 # When we load the cog, we use the name of the file.
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Simple(bot))
+    await bot.add_cog(Simple(bot), override=True)
