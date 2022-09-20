@@ -39,7 +39,7 @@ class Bethesda(commands.Cog):
         return chrome_options
     
 
-    # YouTube commands.  Music. Videos. Channel notifications.
+    # Todd commands.  The new and improved Todd Bot - he is actually usefull now.
     group = app_commands.Group(name='todd', description='Bethesda discord commands', guild_ids=settings.BETHESDA_GUILD_IDS)
 
     '''
