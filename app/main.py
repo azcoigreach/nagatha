@@ -9,9 +9,6 @@ import logging
 #inititalize logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
-
-# This example requires the 'members' and 'message_content' privileged intents to function.
-
 description = '''
 Nagatha is a work in progressand currently in development by @azcoigreach#0001
 Use the (/) slash command to see a list of commands.
@@ -38,6 +35,7 @@ def get_prefix(bot, message):
 
 # list of folders our cogs are in
 initial_extensions = [
+    'app.cogs.support',
     'app.cogs.system',
     'app.cogs.battlemetrics',
     'app.cogs.crypto',
@@ -78,36 +76,6 @@ class NagathaClient(discord.Client):
 # init bot
 bot = NagathaClient(description=description)
 bot = commands.Bot(command_prefix=get_prefix, description=description, intents=intents)
-
-
-# discord invite: https://discord.gg/pM4Z8jjG2y
-# bot invite link: https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot
-@bot.tree.command()
-async def support(interaction: discord.Interaction):
-    '''Support for Nagatha'''
-    # bot_link = "https://discord.com/api/oauth2/authorize?client_id=992074795854352504&permissions=534723947584&scope=bot"
-    support_link = "https://discord.gg/pM4Z8jjG2y"
-    await interaction.response.send_message(f"Nagatha is a custom Bot and constant under development.\nJoin the support server: {support_link}\nPlease report any bugs or issues to @azcoigreach#0001")
-
-# Ping Nagatha to make sure she's awake
-@bot.tree.command()
-async def ping(interaction: discord.Interaction):
-    """Ping Nagatha"""
-    # log guild and channel name ping was sent from
-    logging.info(f"Ping from {interaction.guild.name} in {interaction.channel.name}")
-    await interaction.response.send_message('Hello Dear.')
-
-# random cat photo from tenor to discord
-@bot.tree.command()
-async def cat(interaction: discord.Interaction):
-    """Random cat photo"""
-    url = "https://api.tenor.com/v1/random?key=LIVDSRZULELA&q=cats&limit=1"
-    response = requests.get(url)
-    data = json.loads(response.text)
-    embed = discord.Embed(title="Random cat photo", color=0x00ff00)
-    embed.set_image(url=data['results'][0]['media'][0]['gif']['url'])
-    await interaction.response.send_message(embed=embed)
-
 
 # ON READY
 @bot.event
