@@ -11,7 +11,6 @@ class Crypto(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.logger.info('Crypto cog loaded')
 
     group = app_commands.Group(name='crypto', description='Crypto currency data', guild_ids=settings.CRYPTO_GUILD_IDS)
 
@@ -48,4 +47,6 @@ class Crypto(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=False)
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Crypto(bot), override=True)
+    for guild_id in settings.CRYPTO_GUILD_IDS:
+        logging.info(f'Adding CRYPTO to {guild_id}')
+        await bot.add_cog(Crypto(bot), override=True, guild=discord.Object(id=guild_id))

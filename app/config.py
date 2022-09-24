@@ -14,9 +14,7 @@ class Settings(BaseSettings):
     SYSTEM_ADMIN_IDS: list[int] = []
     SYSTEM_ADMIN_GUILD_IDS: list[int] = []
 
-    MEMBERS_GUILD_IDS: list[int] = []
-    SIMPLE_GUILD_IDS: list[int] = []
-
+    # Module Guild IDs
     BATTLEMETRICS_GUILD_IDS: list[int] = []
 
     CRYPTO_GUILD_IDS: list[int] = []
@@ -26,6 +24,7 @@ class Settings(BaseSettings):
     BETHESDA_GUILD_IDS: list[int] = []
 
     STEAM_GUILD_IDS: list[int] = []
+
 
     class Config:
         env_file = ".env"

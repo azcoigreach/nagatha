@@ -8,7 +8,6 @@ class System(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.logger.info('System cog loaded')
     
     def is_system_admin():
         def predicate(interaction: discord.Interaction) -> bool:
@@ -75,7 +74,6 @@ class System(commands.Cog):
         # defer response
         await interaction.response.defer(ephemeral=True)
         logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
-        # self.bot.tree.copy_global_to(guild=None)
         # defer response
         # await interaction.response.defer(ephemeral=True)
         # self.bot.tree.clear_commands(guild=None)
@@ -86,84 +84,37 @@ class System(commands.Cog):
         
         await interaction.followup.send(f'**`SUCCESS`**: Synced commands to {len(self.bot.guilds)} guilds', ephemeral=True)
         logging.info('Commands synced')
-
-    # # get command tree list
-    # @group.command(name='get_tree')
-    # @is_system_admin()
-    # async def get_tree(self, interaction: discord.Interaction):
-    #     """Get bot command tree"""
-    #     logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
-    #     for guild in self.bot.guilds:
-    #         logging.info(f'Guild: {guild.name} - {guild.id}')
-    #         command_list = self.bot.tree.get_commands(guild=discord.Object(id=guild.id))
-    #         for command in command_list:
-    #             # display List[Union[ContextMenu, Command, Group]]
-    #             logging.info(f'Command: {command.name} - {command.description}')
-    #             if isinstance(command, discord.app_commands.Group):
-    #                 for subcommand in command.commands:
-    #                     logging.info(f'  Subcommand: {subcommand.name} - {subcommand.description}')
-    #     await interaction.response.send_message(f'**`SUCCESS`**: Got command tree for {len(self.bot.guilds)} guilds', ephemeral=True)
-
-    @group.command(name='clear_commands')
+    
+    # get command tree list
+    @group.command(name='get_tree')
     @is_system_admin()
-    async def clear_commands(self, interaction: discord.Interaction, guild_id: str):
-        """Clear command tree from discord"""
-        logging.info(f'Attempting to clear commands from guild_id: {guild_id}')
-        await interaction.response.defer(ephemeral=True)
-        command_list = self.bot.tree.get_commands(guild=discord.Object(id=guild_id))
-        for command in command_list:
-            logging.info(f'Attempting to delete command: {command.name} - {command.description}')
-            self.bot.tree.remove_command(command.name, guild=discord.Object(id=guild_id))
-        logging.info(f'Commands cleared from guild_id: {guild_id}')       
-        await interaction.followup.send(f'**`SUCCESS`**: Cleared commands from {guild_id}', ephemeral=True)
+    async def get_tree(self, interaction: discord.Interaction):
+        """Get bot command tree"""
+        logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
+        for guild in self.bot.guilds:
+            logging.info(f'Guild: {guild.name} - {guild.id}')
+            command_list = self.bot.tree.get_commands(guild=discord.Object(id=guild.id))
+            for command in command_list:
+                # display List[Union[ContextMenu, Command, Group]]
+                logging.info(f'Command: {command.name} - {command.description}')
+                if isinstance(command, discord.app_commands.Group):
+                    for subcommand in command.commands:
+                        logging.info(f'  Subcommand: {subcommand.name} - {subcommand.description}')
+        await interaction.response.send_message(f'**`SUCCESS`**: Got command tree for {len(self.bot.guilds)} guilds', ephemeral=True)
 
-    # # fetch_commands
-    # @group.command(name='scrub_global_commands')
+    # @group.command(name='clear_app_commands')
     # @is_system_admin()
-    # async def scrub_global_commands(self, interaction: discord.Interaction):
-    #     """Scrub global commands"""
-    #     logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
-    #     # self.bot.tree.copy_global_to(guild=None)
-    #     # defer response
+    # async def clear_commands(self, interaction: discord.Interaction, guild_id: str):
+    #     """Clear command tree from discord"""
+    #     logging.info(f'Attempting to clear commands from guild_id: {guild_id}')
     #     await interaction.response.defer(ephemeral=True)
-    #     command_list = await self.bot.tree.fetch_commands(guild=None)
-    #     for command in command_list:
-    #         # display List[Union[ContextMenu, Command, Group]]
-    #         self.bot.remove_command(command.name)
-    #         logging.info(f'Removed command: {command.name} - {command.description}')
-    #         # if isinstance(command, discord.app_commands.Group):
-    #         #     for subcommand in command.commands:
-    #         #         logging.info(f'  Subcommand: {subcommand.name} - {subcommand.description}')
-    #     # await self.bot.tree.sync(guild=None)
-    #     await interaction.followup.send(f'**`SUCCESS`**: Retrieved global command tree', ephemeral=True)
+    #     self.bot.tree.clear_commands(guild=discord.Object(id=guild_id))
+    #     await interaction.followup.send(f'**`SUCCESS`**: Cleared commands from {guild_id}', ephemeral=True)
 
-    # # get command tree list
-    # @group.command(name='scrub_tree')
-    # @is_system_admin()
-    # async def scrub_tree(self, interaction: discord.Interaction):
-    #     """Scrub bot command tree"""
-    #     # defer response
-    #     await interaction.response.defer(ephemeral=True)
-    #     logging.info(f'Connected to {len(self.bot.guilds)} guilds:')
-
-    #     for guild in self.bot.guilds:
-    #         logging.info(f'Guild: {guild.name} - {guild.id}')
-    #         command_list = self.bot.tree.get_commands(guild=discord.Object(id=guild.id))
-    #         for command in command_list:
-    #             # display List[Union[ContextMenu, Command, Group]]
-    #             logging.info(f'Command: {command.name} - {command.description}')
-    #             if isinstance(command, discord.app_commands.Group):
-    #                 for subcommand in command.commands:
-    #                     self.bot.remove_command(subcommand.name)
-    #                     logging.info(f'  Subcommand: {subcommand.name} - {subcommand.description} removed')
-            
-    #         # self.bot.tree.clear_commands(guild=discord.Object(id=guild.id))
-    #         await self.bot.tree.sync(guild=discord.Object(id=guild.id))
-    #         logging.info(f'Scrubbed - {guild.name} - {guild.id}')
-    #     # followup
-    #     await interaction.followup.send(f'**`SUCCESS`**: Scrubbed command tree for {len(self.bot.guilds)} guilds', ephemeral=True)
-    #     # await interaction.response.send_message(f'**`SUCCESS`**: Got command tree for {len(self.bot.guilds)} guilds', ephemeral=True)
-
+    
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(System(bot), override=True)
+    """Load the System module."""
+    for guild_id in settings.SYSTEM_ADMIN_GUILD_IDS:
+        logging.info(f'Adding SYSTEM to {guild_id}')
+        await bot.add_cog(System(bot), override=True, guild=discord.Object(id=guild_id))

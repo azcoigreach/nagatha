@@ -26,7 +26,7 @@ def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
     # Notice how you can use spaces in prefixes. Try to keep them simple though.
-    prefixes = ['!!', 'nagatha ', 'nag ']
+    prefixes = ['!!']
 
     # Check to see if we are outside of a guild. e.g DM's etc.
     if not message.guild:
@@ -42,8 +42,9 @@ initial_extensions = [
     'app.cogs.battlemetrics',
     'app.cogs.crypto',
     'app.cogs.bethesda',
-    'app.cogs.youtube',
-    'app.cogs.steam',
+    # 'app.cogs.youtube',
+    # 'app.cogs.steam',
+    # 'app.cogs.buttons',
     # 'app.cogs.members',
     # 'app.cogs.simple',
     ]
@@ -72,10 +73,7 @@ class NagathaClient(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        # logging.info('setup_hook initiated')
         pass
-        # self.tree.copy_global_to(guild=discord.Object(id=settings.NAGATHA_GUILD_ID))
-        # await self.tree.sync(guilds=discord.Object(ids=settings.REGISTERED_GUILD_IDS))
         
 # init bot
 bot = NagathaClient(description=description)
@@ -110,6 +108,7 @@ async def cat(interaction: discord.Interaction):
     embed.set_image(url=data['results'][0]['media'][0]['gif']['url'])
     await interaction.response.send_message(embed=embed)
 
+
 # ON READY
 @bot.event
 async def on_ready():
@@ -130,7 +129,7 @@ async def load_extentions():
             await bot.load_extension(extension)
         except Exception as e:
             logging.error(f'Failed to load extension {extension}.', exc_info=e)
-            traceback.print_exc()
+            # traceback.print_exc()
 
 # MAIN
 async def main():

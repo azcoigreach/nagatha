@@ -20,7 +20,6 @@ class Bethesda(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.logger.info('Bethesda cog loaded')
     
     def set_chrome_options(chrome_options) -> None:
         """Sets chrome options for Selenium.
@@ -54,7 +53,7 @@ class Bethesda(commands.Cog):
         # list of costumes from the fallout wiki
         costumes = ['In-game Faction', 'Holiday', 'Clown', 'Civilian', 'Naked', 'Mascot']
         # list of objectives
-        objectives = ['Perfect Pie', 'Capture', 'Extortion', 'Build-up Workshop', 'Clear Appalacia of Evil', 'Kill the Overseer', 'Got any Chems!?']
+        objectives = ['Perfect Pie', 'Capture', 'Extortion', 'Build-up Workshop', 'Clear Appalacia of Evil', 'Kill the Overseer', 'Got any Chems!?', 'Workshop Inspector']
         # list of wanted status with weight for more likely to be not wanted
         wanted_status = ['Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted', 'Not Wanted']
         
@@ -124,4 +123,6 @@ class Bethesda(commands.Cog):
 
 # add commands to cog
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Bethesda(bot), override=True)
+    for guild_id in settings.BETHESDA_GUILD_IDS:
+        logging.info(f'Adding Bethesda to {guild_id}')
+        await bot.add_cog(Bethesda(bot), override=True, guild=discord.Object(id=guild_id))

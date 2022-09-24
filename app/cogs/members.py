@@ -9,7 +9,6 @@ class Members(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.logger.info('Members cog loaded')
     
     group = app_commands.Group(name='members', description='Member commands')
 
@@ -49,5 +48,7 @@ class Members(commands.Cog):
         embed.add_field(name='\uFEFF', value=perms)
         await interaction.response.send_message(content=None, embed=embed, ephemeral=True)
 
-async def setup(bot):
-    await bot.add_cog(Members(bot))
+async def setup(bot: commands.Bot) -> None:
+    for guild_id in settings.SYSTEM_ADMIN_GUILD_IDS:
+        logging.info(f'Adding Members to {guild_id}')
+        await bot.add_cog(Members(bot), override=True, guild=discord.Object(id=guild_id))

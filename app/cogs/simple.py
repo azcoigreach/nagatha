@@ -8,16 +8,17 @@ class Simple(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.logger = logging.getLogger(__name__)
-        self.logger.info('Simple cog loaded')
 
-    @app_commands.command(name='repeat')
+    group = app_commands.Group(name='simple', description='Simple command examples', guild_ids=settings.SYSTEM_ADMIN_GUILD_IDS)
+
+    @group.command(name='repeat')
     async def do_repeat(self, interaction: discord.Interaction, *, our_input: str) -> None:
         """A simple command which repeats our input.
         In rewrite Context is automatically passed to our commands as the first argument after self."""
 
         await interaction.response.send_message(our_input)
 
-    @app_commands.command(name='add')
+    @group.command(name='add')
     @commands.guild_only()
     async def do_addition(self, interaction: discord.Interaction, first: int, second: int) -> None:
         """A simple command which does addition on two integer values."""
@@ -25,7 +26,7 @@ class Simple(commands.Cog):
         total = first + second
         await interaction.response.send_message(f'The sum of **{first}** and **{second}**  is  **{total}**')
 
-    @app_commands.command(name='me')
+    @group.command(name='me')
     @commands.is_owner()
     async def only_me(self, interaction: discord.Interaction) -> None:
         """A simple command which only responds to the owner of the bot."""
@@ -33,7 +34,7 @@ class Simple(commands.Cog):
 
         await interaction.response.send_message(f'Hello {interaction.user.name}#{interaction.user.discriminator}. This command can only be used by you!!')
 
-    @app_commands.command(name='embeds')
+    @group.command(name='embeds')
     @commands.guild_only()
     async def example_embed(self, interaction: discord.Interaction) -> None:
         """A simple command which showcases the use of embeds.
@@ -71,4 +72,6 @@ class Simple(commands.Cog):
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case SimpleCog.
 # When we load the cog, we use the name of the file.
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Simple(bot), override=True)
+    for guild_id in settings.SYSTEM_ADMIN_GUILD_IDS:
+        logging.info(f'Adding Simple to {guild_id}')
+        await bot.add_cog(Simple(bot), override=True, guild=discord.Object(id=guild_id))
